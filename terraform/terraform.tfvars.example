@@ -1,0 +1,5 @@
+aws_region          = "ap-southeast-1"
+project_name        = "automation-deployment"
+ecr_repository_name = "automation-deployment"
+key_name            = "your-ec2-key-pair-name"
+instance_type       = "t3.micro"
