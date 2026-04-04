@@ -26,3 +26,21 @@ variable "instance_type" {
   type        = string
   default     = "t3.micro"
 }
+
+variable "db_name" {
+  description = "PostgreSQL database name"
+  type        = string
+  default     = "appdb"
+}
+
+variable "db_username" {
+  description = "PostgreSQL master username"
+  type        = string
+  default     = "appuser"
+}
+
+variable "db_password" {
+  description = "PostgreSQL master password"
+  type        = string
+  sensitive   = true
+}

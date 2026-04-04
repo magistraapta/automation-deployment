@@ -1,0 +1,8 @@
+aws_region          = "ap-southeast-1"
+project_name        = "automation-deployment-dev"
+ecr_repository_name = "automation-deployment-dev"
+key_name            = "app-key-pair"
+instance_type       = "t3.micro"
+db_name             = "golang_db"
+db_username         = "postgres"
+db_password         = "postgres"

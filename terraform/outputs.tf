@@ -12,3 +12,8 @@ output "app_url" {
   description = "URL to access the application"
   value       = "http://${module.ec2.public_ip}:8080"
 }
+
+output "rds_endpoint" {
+  description = "RDS endpoint to use as DB_HOST in the app"
+  value       = module.rds.endpoint
+}
