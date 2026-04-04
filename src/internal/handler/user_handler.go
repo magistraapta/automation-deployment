@@ -64,6 +64,11 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
+	err = h.userRepository.UpdateUser(user)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(200, user)
 }
 
