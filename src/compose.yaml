@@ -7,13 +7,52 @@
 # You can add other services your application may depend on here, such as a
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
+#
+# Variable substitution (${VAR}): place a file named .env in this same directory
+# (next to compose.yaml) or run: docker compose --env-file .env up
+# See: https://docs.docker.com/compose/environment-variables/set-environment-variables/
+#
+# env_file: on a service injects keys into the container; it does not substitute
+# ${VAR} in this YAML — substitution uses the project .env (or your shell).
 services:
   server:
     build:
       context: .
       target: final
+    image: automation-deployment-dev-server:latest
+    env_file:
+      - .env
     ports:
       - 8080:8080
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      # Host must be the Compose service name `database`, not localhost (localhost
+      # inside this container is only the app). Built from the same creds as POSTGRES_*.
+      DATABASE_URL: postgres://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?sslmode=require
+
+  database:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      # $$ → $ in container; expand POSTGRES_* set by this service’s environment
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+
+volumes:
+  db-data:
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
