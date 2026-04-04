@@ -2,19 +2,29 @@ package main
 
 import (
 	"log/slog"
+	"os"
+	"src/internal/config"
 	"src/internal/handler"
+	apirouter "src/internal/router"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	router := gin.Default()
-	userHandler := handler.NewUserHandler()
-	router.GET("/users", userHandler.GetUsers)
+	config.LoadEnv()
 
-	router.GET("/", func(c *gin.Context) {
+	db, err := config.ConnectDatabase()
+	if err != nil {
+		slog.Error("database connection failed", "error", err)
+		os.Exit(1)
+	}
+
+	router := gin.Default()
+	userHandler := handler.NewUserHandler(db)
+	apirouter.UserRouter(router, userHandler)
+	router.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"message": "Hello, World!",
+			"message": "OK",
 		})
 	})
 
