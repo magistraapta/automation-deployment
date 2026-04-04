@@ -30,7 +30,7 @@ services:
     environment:
       # Host must be the Compose service name `database`, not localhost (localhost
       # inside this container is only the app). Built from the same creds as POSTGRES_*.
-      DATABASE_URL: postgres://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?sslmode=require
+      DATABASE_URL: postgres://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@automation-deployment-dev-db.c7ug0q28421q.ap-southeast-1.rds.amazonaws.com:5432/${POSTGRES_DB}?sslmode=require
 
   database:
     image: postgres:16
