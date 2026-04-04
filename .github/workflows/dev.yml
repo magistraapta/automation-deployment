@@ -72,9 +72,5 @@ jobs:
               --name server \
               --restart unless-stopped \
               -p 8080:8080 \
-              -e DB_HOST=${{ secrets.DEV_DB_HOST }} \
-              -e DB_PORT=5432 \
-              -e DB_NAME=${{ secrets.DEV_DB_NAME }} \
-              -e DB_USER=${{ secrets.DEV_DB_USER }} \
-              -e DB_PASSWORD=${{ secrets.DEV_DB_PASSWORD }} \
+              -e DATABASE_URL="postgres://${{ secrets.DEV_DB_USER }}:${{ secrets.DEV_DB_PASSWORD }}@${{ secrets.DEV_DB_HOST }}:5432/${{ secrets.DEV_DB_NAME }}" \
               ${{ steps.login-ecr.outputs.registry }}/automation-deployment-dev:${{ github.sha }}
