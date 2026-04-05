@@ -10,4 +10,5 @@ terraform.tfstate
 terraform.tfstate.backup
 .env
 .idea
+.claude
 .vscode
